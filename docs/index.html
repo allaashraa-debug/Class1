@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#6C63FF" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>المراجع الصغير | Little Reviewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800;900&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #F6F8FF;
+      --surface: #FFFFFF;
+      --surface-soft: #EEF2FF;
+      --text: #1E2436;
+      --muted: #64748B;
+      --primary: #5B53F5;
+      --primary-dark: #4338CA;
+      --border: #E2E8F0;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --shadow: 0 10px 26px rgba(30, 41, 59, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Cairo', 'Fredoka', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+      padding-bottom: env(safe-area-inset-bottom, 20px);
+    }
+
+    .en {
+      font-family: 'Fredoka', 'Cairo', system-ui, sans-serif;
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+
+    .app-shell {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 16px 16px 36px;
+    }
+
+    button {
+      font-family: inherit;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.14s ease, box-shadow 0.14s ease, opacity 0.14s ease;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .top-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+      background: var(--surface);
+      padding: 14px 16px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .profile-chip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: transparent;
+      padding: 4px;
+      text-align: start;
+      color: var(--text);
+    }
+
+    .avatar-circle {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+      display: grid;
+      place-items: center;
+      font-size: 28px;
+      border: 3px solid #F59E0B;
+      flex-shrink: 0;
+    }
+
+    .greeting-sub {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .greeting-name {
+      font-size: 17px;
+      font-weight: 900;
+      line-height: 1.25;
+    }
+
+    .stats-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 800;
+      min-height: 38px;
+    }
+
+    .pill-star { background: #FEF3C7; color: #B45309; }
+    .pill-streak { background: #FFEDD5; color: #C2410C; }
+    .pill-btn { background: #EEF2FF; color: #4338CA; }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 20px 2px 12px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .section-title span {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    /* 2x2 Primary Subjects Grid */
+    .subjects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    @media (min-width: 680px) {
+      .subjects-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    .subject-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 26px;
+      padding: 18px 14px;
+      min-height: 164px;
+      color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 10px;
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.14);
+    }
+
+    .subject-card::before,
+    .subject-card::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.16);
+      pointer-events: none;
+    }
+
+    .subject-card::before {
+      width: 96px;
+      height: 96px;
+      top: -28px;
+      right: -28px;
+    }
+
+    .subject-card::after {
+      width: 64px;
+      height: 64px;
+      bottom: -20px;
+      left: -18px;
+    }
+
+    .icon-badge {
+      width: 60px;
+      height: 60px;
+      border-radius: 20px;
+      background: #FFFFFF;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+      z-index: 1;
+    }
+
+    .subject-card h3 {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 900;
+      z-index: 1;
+    }
+
+    .subject-card .sub {
+      font-size: 12px;
+      font-weight: 700;
+      opacity: 0.94;
+      background: rgba(255, 255, 255, 0.22);
+      padding: 3px 10px;
+      border-radius: 999px;
+      z-index: 1;
+    }
+
+    .grad-math { background: linear-gradient(145deg, #10B981, #059669); }
+    .grad-english { background: linear-gradient(145deg, #3B82F6, #2563EB); }
+    .grad-science { background: linear-gradient(145deg, #14B8A6, #0D9488); }
+    .grad-arabic { background: linear-gradient(145deg, #F59E0B, #EA580C); }
+    .grad-social { background: linear-gradient(145deg, #06B6D4, #0284C7); }
+    .grad-islamic { background: linear-gradient(145deg, #8B5CF6, #6D28D9); }
+
+    .daily-banner {
+      width: 100%;
+      margin-top: 16px;
+      background: linear-gradient(135deg, #6366F1, #EC4899);
+      color: #FFFFFF;
+      border-radius: var(--radius-lg);
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      text-align: start;
+      box-shadow: 0 12px 24px rgba(99, 102, 241, 0.24);
+    }
+
+    .daily-banner h3 {
+      margin: 0 0 4px;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .daily-banner p {
+      margin: 0;
+      font-size: 13px;
+      opacity: 0.92;
+      font-weight: 600;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mini-subject {
+      border-radius: var(--radius-md);
+      padding: 14px;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: start;
+      min-height: 76px;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.1);
+    }
+
+    .mini-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.24);
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .activity-card {
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: var(--shadow);
+      margin-bottom: 10px;
+      width: 100%;
+      text-align: start;
+      color: var(--text);
+    }
+
+    .activity-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .activity-emoji {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    /* Shared sub-screen bar */
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .back-btn {
+      min-width: 48px;
+      min-height: 48px;
+      padding: 0 14px;
+      border-radius: 16px;
+      background: var(--surface);
+      color: var(--text);
+      font-weight: 800;
+      font-size: 14px;
+      box-shadow: var(--shadow);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 14px;
+    }
+
+    .progress-track {
+      height: 12px;
+      background: #E2E8F0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 10px 0 16px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #6366F1, #10B981);
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+
+    .q-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      background: var(--surface-soft);
+      color: var(--primary-dark);
+    }
+
+    .q-emoji-box {
+      font-size: 54px;
+      text-align: center;
+      margin: 8px 0 10px;
+    }
+
+    .q-text {
+      font-size: 20px;
+      font-weight: 900;
+      line-height: 1.45;
+      text-align: center;
+      margin: 6px 0 18px;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 11px;
+    }
+
+    .options-grid.images-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .option-btn {
+      min-height: 58px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: #F8FAFC;
+      border: 2px solid #E2E8F0;
+      color: var(--text);
+      font-size: 17px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .option-btn.emoji-big {
+      font-size: 38px;
+      min-height: 88px;
+    }
+
+    .option-btn.selected {
+      border-color: var(--primary);
+      background: #EEF2FF;
+      color: var(--primary-dark);
+    }
+
+    .arrange-box {
+      min-height: 62px;
+      border: 2px dashed #A5B4FC;
+      background: #F5F7FF;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .letter-tile {
+      min-width: 52px;
+      min-height: 52px;
+      padding: 8px 14px;
+      border-radius: 14px;
+      background: linear-gradient(145deg, #6366F1, #4F46E5);
+      color: #FFFFFF;
+      font-size: 22px;
+      font-weight: 900;
+      box-shadow: 0 5px 12px rgba(79, 70, 229, 0.25);
+    }
+
+    .letter-tile.used {
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .match-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .match-btn {
+      min-height: 54px;
+      padding: 10px;
+      border-radius: 14px;
+      background: #F8FAFC;
+      border: 2px solid #CBD5E1;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .match-btn.active { border-color: #6366F1; background: #EEF2FF; }
+    .match-btn.done { border-color: #10B981; background: #D1FAE5; color: #065F46; }
+
+    .primary-btn {
+      width: 100%;
+      min-height: 54px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #5B53F5, #7C3AED);
+      color: #FFFFFF;
+      font-size: 16px;
+      font-weight: 900;
+      box-shadow: 0 8px 18px rgba(91, 83, 245, 0.26);
+    }
+
+    .secondary-btn {
+      min-height: 48px;
+      padding: 10px 16px;
+      border-radius: 14px;
+      background: #EEF2FF;
+      color: #4338CA;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .feedback-box {
+      border-radius: 20px;
+      padding: 16px;
+      margin-top: 14px;
+      text-align: center;
+    }
+
+    .feedback-ok { background: #DCFCE7; border: 2px solid #22C55E; color: #14532D; }
+    .feedback-no { background: #FEE2E2; border: 2px solid #EF4444; color: #7F1D1D; }
+
+    /* Memory Grid */
+    .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    @media (min-width: 520px) {
+      .memory-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    .mem-card {
+      aspect-ratio: 1 / 1;
+      border-radius: 18px;
+      background: linear-gradient(145deg, #6366F1, #8B5CF6);
+      color: #FFFFFF;
+      font-size: 18px;
+      font-weight: 900;
+      display: grid;
+      place-items: center;
+      padding: 6px;
+      box-shadow: 0 6px 14px rgba(99, 102, 241, 0.22);
+    }
+
+    .mem-card.open {
+      background: #FFFFFF;
+      color: var(--text);
+      border: 3px solid #6366F1;
+    }
+
+    .mem-card.matched {
+      background: #D1FAE5;
+      color: #065F46;
+      border: 3px solid #10B981;
+    }
+
+    .badges-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .badge-card {
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 14px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      border: 2px solid transparent;
+    }
+
+    .badge-card.locked {
+      opacity: 0.52;
+      filter: grayscale(0.75);
+    }
+
+    .avatar-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin: 14px 0;
+    }
+
+    .avatar-pick {
+      width: 60px;
+      height: 60px;
+      border-radius: 18px;
+      font-size: 30px;
+      background: #F1F5F9;
+      border: 2px solid transparent;
+    }
+
+    .avatar-pick.active {
+      background: #FEF3C7;
+      border-color: #F59E0B;
+    }
+
+    input, select {
+      width: 100%;
+      min-height: 48px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 2px solid #CBD5E1;
+      font-family: inherit;
+      font-size: 15px;
+      margin-bottom: 10px;
+      background: #FFFFFF;
+    }
+
+    .chip-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .chip {
+      min-height: 40px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: #E2E8F0;
+      color: var(--text);
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .chip.active {
+      background: var(--primary);
+      color: #FFFFFF;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="app-shell"></div>
+
+  <script>
+    // ==================== CURRICULUM DATA (60 Grade 1 Questions) ====================
+    const DEFAULT_QUESTIONS = [
+      // Arabic (10)
+      { id: 1, subject: "اللغة العربية", unit: "الحروف الهجائية", type: "MULTIPLE_CHOICE", text: "أي من الكلمات التالية تبدأ بحرف (أ)؟", emoji: "🐰", options: ["أَرْنَب","بَيْت","كِتَاب","تُفَّاحَة"], answer: "أَرْنَب", explanation: "كلمة (أَرْنَب) تبدأ بحرف الألف المفتوح (أَ)." },
+      { id: 2, subject: "اللغة العربية", unit: "الحروف الهجائية", type: "FILL_BLANK", text: "أكمل الحرف الناقص في اسم هذه الصورة الجميلة: بـ...ـت", emoji: "🏠", options: ["ي","و","أ","ش"], answer: "ي", explanation: "الحرف الناقص هو الياء لتصبح الكلمة (بَيْت)." },
+      { id: 3, subject: "اللغة العربية", unit: "تكوين الكلمات", type: "ARRANGE_LETTERS", text: "رتب الحروف المبعثرة سريعاً لتكوين اسم ملك الغابة!", emoji: "🦁", options: ["س","أ","د"], answer: "أسد", explanation: "الحروف (أ - س - د) تكون كلمة (أَسَد) ملك الغابة!" },
+      { id: 4, subject: "اللغة العربية", unit: "تكوين الكلمات", type: "IMAGE_SELECTION", text: "اختر صورة (الـسَّـمَـكَـة) الملونة من الخيارات أسفله:", emoji: "🌊", options: ["🐟","🐪","🍎","🚗"], answer: "🐟", explanation: "السمكة تعيش في الماء وهي ملونة ومرحة!" },
+      { id: 5, subject: "اللغة العربية", unit: "المدود والحركات", type: "MATCH_COLUMNS", text: "صل كل حرف بالكلمة المناسبة له:", emoji: "📚", options: ["أ-أرنب","ب-بطة","ت-تفاحة","ث-ثعلب"], answer: "أ-أرنب;ب-بطة;ت-تفاحة;ث-ثعلب", explanation: "أ لأرنب، ب لبطة، ت لتفاحة، وث لثعلب!" },
+      { id: 6, subject: "اللغة العربية", unit: "المدود والحركات", type: "TRUE_FALSE", text: "المد في كلمة (تُـفَّـاحَـة) هو مد بالواو.", emoji: "🍎", options: ["صح","خطأ"], answer: "خطأ", explanation: "المد في كلمة (تُـفَّـاحَـة) هو مد بالألِف وليس بالواو." },
+      { id: 7, subject: "اللغة العربية", unit: "تكوين الكلمات", type: "ARRANGE_LETTERS", text: "رتب الحروف لتكوين اسم الجسم المنير ليلاً في السماء:", emoji: "🌙", options: ["م","ق","ر"], answer: "قمر", explanation: "الحروف (ق - م - ر) تكون كلمة (قَمَر) الجميلة!" },
+      { id: 8, subject: "اللغة العربية", unit: "الحروف الهجائية", type: "MULTIPLE_CHOICE", text: "ما هو الحرف الذي يأتي بعد حرف (ج) في الحروف الهجائية؟", emoji: "🔤", options: ["ح","خ","ب","د"], answer: "ح", explanation: "ترتيب الحروف هو: أ، ب، ت، ث، ج، ح، خ." },
+      { id: 9, subject: "اللغة العربية", unit: "المدود والحركات", type: "FILL_BLANK", text: "أكمل الحرف الناقص في كلمة: شَـ...ـس", emoji: "☀️", options: ["م","ل","ك","ع"], answer: "م", explanation: "الحرف الناقص هو الميم لتصبح الكلمة (شَمْس)." },
+      { id: 10, subject: "اللغة العربية", unit: "المفردات الجميلة", type: "TRUE_FALSE", text: "كلمة (قَلَم) تبدأ بحرف القاف.", emoji: "✏️", options: ["صح","خطأ"], answer: "صح", explanation: "نعم، كلمة (قَلَم) تبدأ بحرف القاف المفتوح (قَ)." },
+
+      // Mathematics (10)
+      { id: 11, subject: "Mathematics", unit: "Numbers & Counting", type: "MULTIPLE_CHOICE", text: "Count the beautiful butterflies in the garden: 🦋 🦋 🦋 🦋", emoji: "🌸", options: ["2","3","4","5"], answer: "4", explanation: "There are 4 colorful butterflies flying in the garden!" },
+      { id: 12, subject: "Mathematics", unit: "Addition & Subtraction", type: "MULTIPLE_CHOICE", text: "What is the answer: 3 + 2 = ?", emoji: "➕", options: ["3","4","5","6"], answer: "5", explanation: "3 apples plus 2 apples makes 5 delicious apples!" },
+      { id: 13, subject: "Mathematics", unit: "Addition & Subtraction", type: "FILL_BLANK", text: "Fill in the missing number: 7 - ... = 4", emoji: "🔢", options: ["1","2","3","4"], answer: "3", explanation: "When subtracting 3 from 7, we have 4 left. Awesome!" },
+      { id: 14, subject: "Mathematics", unit: "Numbers & Counting", type: "ARRANGE_LETTERS", text: "Arrange the numbers from smallest to largest:", emoji: "📈", options: ["3","1","2","4"], answer: "1234", explanation: "The correct ascending order is: 1, then 2, then 3, then 4." },
+      { id: 15, subject: "Mathematics", unit: "Patterns & Shapes", type: "IMAGE_SELECTION", text: "Which shape completes the pattern: 🔴 🔵 🔴 🔵 ... ?", emoji: "🎨", options: ["🔴","🔵","🟡","🟢"], answer: "🔴", explanation: "The pattern alternates between red and blue circles, so red is next!" },
+      { id: 16, subject: "Mathematics", unit: "Shapes & Geometry", type: "TRUE_FALSE", text: "A triangle has 3 corners and 3 sides: 🔺.", emoji: "📐", options: ["True","False"], answer: "True", explanation: "That is correct! A triangle always has 3 sides and 3 corners." },
+      { id: 17, subject: "Mathematics", unit: "Numbers & Counting", type: "MULTIPLE_CHOICE", text: "Which number is greater: 9 or 6?", emoji: "⭐", options: ["9","6","Equal"], answer: "9", explanation: "9 is greater than 6!" },
+      { id: 18, subject: "Mathematics", unit: "Addition & Subtraction", type: "MULTIPLE_CHOICE", text: "Sarah has 4 stars ⭐ and gets 4 more ⭐. How many stars does she have?", emoji: "🌟", options: ["6","7","8","9"], answer: "8", explanation: "4 + 4 = 8 stars! Double fun!" },
+      { id: 19, subject: "Mathematics", unit: "Shapes & Geometry", type: "MATCH_COLUMNS", text: "Match each math problem to its correct answer:", emoji: "🧮", options: ["1 + 1-2","2 + 3-5","6 - 2-4","5 + 5-10"], answer: "1 + 1-2;2 + 3-5;6 - 2-4;5 + 5-10", explanation: "1+1=2, 2+3=5, 6-2=4, and 5+5=10. Great math skills!" },
+      { id: 20, subject: "Mathematics", unit: "Shapes & Geometry", type: "TRUE_FALSE", text: "A square has 4 equal sides: 🟦.", emoji: "🟦", options: ["True","False"], answer: "True", explanation: "Yes! Every square has 4 equal sides and 4 corners." },
+
+      // English (10)
+      { id: 21, subject: "English", unit: "Alphabets", type: "MULTIPLE_CHOICE", text: "Which uppercase letter matches the lowercase letter 'b'?", emoji: "🐝", options: ["A","B","C","D"], answer: "B", explanation: "The uppercase counterpart of lowercase 'b' is 'B' for Bee!" },
+      { id: 22, subject: "English", unit: "Vocabulary & Animals", type: "IMAGE_SELECTION", text: "Choose the correct emoji expressing the word (CAT):", emoji: "🐾", options: ["🐶","🐱","🦁","🦊"], answer: "🐱", explanation: "The emoji with whiskers is the CAT! Meow!" },
+      { id: 23, subject: "English", unit: "Vocabulary & Animals", type: "FILL_BLANK", text: "Complete the missing letter of this fruit: A _ P L E", emoji: "🍎", options: ["P","B","X","T"], answer: "P", explanation: "The completed word is APPLE. Healthy and sweet!" },
+      { id: 24, subject: "English", unit: "Word Ordering", type: "ARRANGE_LETTERS", text: "Arrange letters to spell the word (SUN): U - S - N", emoji: "☀️", options: ["N","S","U"], answer: "SUN", explanation: "S - U - N spells SUN which gives us warm morning light!" },
+      { id: 25, subject: "English", unit: "Alphabets", type: "TRUE_FALSE", text: "The word (DOG) starts with the letter 'D'.", emoji: "🐶", options: ["True","False"], answer: "True", explanation: "That is true! DOG starts with the consonant letter 'D'. Good job!" },
+      { id: 26, subject: "English", unit: "Colors & Objects", type: "MULTIPLE_CHOICE", text: "What color is a ripe banana? 🍌", emoji: "🍌", options: ["Yellow","Blue","Red","Black"], answer: "Yellow", explanation: "A ripe sweet banana is bright yellow!" },
+      { id: 27, subject: "English", unit: "Word Ordering", type: "ARRANGE_LETTERS", text: "Arrange the letters to spell the buzz insect (BEE):", emoji: "🐝", options: ["E","B","E"], answer: "BEE", explanation: "B - E - E spells BEE! Bees make sweet honey!" },
+      { id: 28, subject: "English", unit: "Vocabulary & Animals", type: "MATCH_COLUMNS", text: "Match each letter to a word starting with it:", emoji: "📖", options: ["A-Apple 🍎","B-Ball ⚽","C-Car 🚗","D-Duck 🦆"], answer: "A-Apple 🍎;B-Ball ⚽;C-Car 🚗;D-Duck 🦆", explanation: "A is for Apple, B is for Ball, C is for Car, and D is for Duck!" },
+      { id: 29, subject: "English", unit: "Alphabets", type: "MULTIPLE_CHOICE", text: "Which of these is a vowel letter?", emoji: "🔤", options: ["A","B","K","T"], answer: "A", explanation: "The 5 vowels in English are A, E, I, O, U!" },
+      { id: 30, subject: "English", unit: "Colors & Objects", type: "TRUE_FALSE", text: "The sky on a sunny day is usually blue.", emoji: "🌤️", options: ["True","False"], answer: "True", explanation: "Yes! On a clear sunny day, the sky looks bright blue!" },
+
+      // Science (10)
+      { id: 31, subject: "Science", unit: "Living & Non-Living", type: "MULTIPLE_CHOICE", text: "Which of these is a living thing that grows, breathes, and needs water?", emoji: "🌱", options: ["A green plant","A toy car","A rock","A wooden chair"], answer: "A green plant", explanation: "Plants are living things! They need water, sunlight, and air to grow." },
+      { id: 32, subject: "Science", unit: "Five Senses", type: "MULTIPLE_CHOICE", text: "Which body part do we use to see colorful rainbows?", emoji: "🌈", options: ["Eyes","Ears","Hands","Nose"], answer: "Eyes", explanation: "We use our eyes for the sense of sight to see colors and shapes!" },
+      { id: 33, subject: "Science", unit: "Five Senses", type: "IMAGE_SELECTION", text: "Which sense organ helps us listen to sweet music and birds?", emoji: "🎶", options: ["👂","👀","👃","👅"], answer: "👂", explanation: "Our ears help us hear sounds all around us!" },
+      { id: 34, subject: "Science", unit: "Plants & Animals", type: "TRUE_FALSE", text: "Plants need sunlight and water to grow healthy and strong.", emoji: "🌻", options: ["True","False"], answer: "True", explanation: "Yes! Sunlight, water, air, and soil help plants grow tall and green." },
+      { id: 35, subject: "Science", unit: "Plants & Animals", type: "FILL_BLANK", text: "Fish breathe underwater using their ...ills.", emoji: "🐟", options: ["g","w","b","t"], answer: "g", explanation: "Fish use gills to breathe oxygen dissolved in water!" },
+      { id: 36, subject: "Science", unit: "Weather & Sky", type: "MULTIPLE_CHOICE", text: "What bright star gives Earth light and warmth during the day?", emoji: "☀️", options: ["The Sun","The Moon","A Cloud","A Comet"], answer: "The Sun", explanation: "The Sun is a bright star that lights up and warms our planet Earth!" },
+      { id: 37, subject: "Science", unit: "Matter & Water", type: "TRUE_FALSE", text: "Ice is solid water that melts when it gets warm.", emoji: "🧊", options: ["True","False"], answer: "True", explanation: "Correct! When ice warms up, it melts back into liquid water." },
+      { id: 38, subject: "Science", unit: "Five Senses", type: "MATCH_COLUMNS", text: "Match each sense organ to what it helps us do:", emoji: "🔬", options: ["Eyes 👀-Seeing colors","Ears 👂-Hearing sounds","Nose 👃-Smelling flowers","Tongue 👅-Tasting fruit"], answer: "Eyes 👀-Seeing colors;Ears 👂-Hearing sounds;Nose 👃-Smelling flowers;Tongue 👅-Tasting fruit", explanation: "Our five senses help us explore and understand the wonderful world!" },
+      { id: 39, subject: "Science", unit: "Plants & Animals", type: "ARRANGE_LETTERS", text: "Arrange the letters to spell the plant part under the soil (ROOT):", emoji: "🌿", options: ["O","R","T","O"], answer: "ROOT", explanation: "R - O - O - T spells ROOT! Roots drink up water from the soil." },
+      { id: 40, subject: "Science", unit: "Weather & Sky", type: "MULTIPLE_CHOICE", text: "What falls from dark rain clouds to water the trees and flowers?", emoji: "🌧️", options: ["Rain","Sand","Leaves","Feathers"], answer: "Rain", explanation: "Raindrops fall from clouds and give fresh water to plants and animals!" },
+
+      // Social Studies (10)
+      { id: 41, subject: "Social Studies", unit: "School & Community", type: "MULTIPLE_CHOICE", text: "Where do we go every day to learn reading, writing, and play with friends?", emoji: "🏫", options: ["School","Airport","Hospital","Train Station"], answer: "School", explanation: "School is our learning place where we study and play with classmates!" },
+      { id: 42, subject: "Social Studies", unit: "Traffic Rules", type: "IMAGE_SELECTION", text: "Which traffic light color means 'Stop' for vehicles?", emoji: "🚦", options: ["🔴","🟢","🟡","🔵"], answer: "🔴", explanation: "Red means STOP, yellow means GET READY, and green means GO safely!" },
+      { id: 43, subject: "Social Studies", unit: "Transportation", type: "TRUE_FALSE", text: "An airplane is an air vehicle that flies high in the sky.", emoji: "✈️", options: ["True","False"], answer: "True", explanation: "Yes, airplanes fly high in the air carrying travelers quickly." },
+      { id: 44, subject: "Social Studies", unit: "Environment", type: "FILL_BLANK", text: "We keep our parks clean by putting trash in the dust...in.", emoji: "🌳", options: ["b","p","d","m"], answer: "b", explanation: "We put trash in the dustbin to keep our environment tidy and clean!" },
+      { id: 45, subject: "Social Studies", unit: "Community Helpers", type: "MATCH_COLUMNS", text: "Match each community helper to their role:", emoji: "👨‍⚕️", options: ["Teacher-Teaches students","Doctor-Treats patients","Police Officer-Keeps us safe","Firefighter-Extinguishes fires"], answer: "Teacher-Teaches students;Doctor-Treats patients;Police Officer-Keeps us safe;Firefighter-Extinguishes fires", explanation: "All community helpers work hard to keep our society safe and happy!" },
+      { id: 46, subject: "Social Studies", unit: "Planet Earth", type: "MULTIPLE_CHOICE", text: "What is the name of our beautiful blue home planet?", emoji: "🌍", options: ["Earth","Mars","Jupiter","The Moon"], answer: "Earth", explanation: "We live on planet Earth, filled with oceans, land, fresh air, and life!" },
+      { id: 47, subject: "Social Studies", unit: "Transportation", type: "IMAGE_SELECTION", text: "Which vehicle travels on water across seas and oceans?", emoji: "🌊", options: ["🚢","🚌","🚲","🚆"], answer: "🚢", explanation: "A ship travels across water on seas and oceans!" },
+      { id: 48, subject: "Social Studies", unit: "Traffic Rules", type: "MULTIPLE_CHOICE", text: "Where should pedestrians safely cross a busy street?", emoji: "🚶", options: ["Zebra Crossing","Middle of highway","Behind parked cars","Anywhere"], answer: "Zebra Crossing", explanation: "Always use the pedestrian zebra crossing and look both ways!" },
+      { id: 49, subject: "Social Studies", unit: "Seasons", type: "MULTIPLE_CHOICE", text: "Which season has blooming flowers and warm gentle weather?", emoji: "🌸", options: ["Spring","Winter","Midnight","Storm"], answer: "Spring", explanation: "Spring is the season when flowers bloom and trees turn lush green!" },
+      { id: 50, subject: "Social Studies", unit: "Nature", type: "TRUE_FALSE", text: "Planting trees helps keep our air fresh and clean.", emoji: "🌲", options: ["True","False"], answer: "True", explanation: "Trees give us clean oxygen and shade, making Earth healthier!" },
+
+      // Islamic Studies (10)
+      { id: 51, subject: "Islamic Studies", unit: "Pillars of Islam", type: "MULTIPLE_CHOICE", text: "How many pillars of Islam are there?", emoji: "🕋", options: ["3","5","6","7"], answer: "5", explanation: "There are five pillars of Islam: Shahadah, Salah, Zakah, Sawm, and Hajj." },
+      { id: 52, subject: "Islamic Studies", unit: "Islamic Manners", type: "TRUE_FALSE", text: "We say 'Bismillah' before we begin eating or drinking.", emoji: "🥛", options: ["True","False"], answer: "True", explanation: "We mention the name of Allah before eating and drinking to receive blessings." },
+      { id: 53, subject: "Islamic Studies", unit: "Islamic Manners", type: "MULTIPLE_CHOICE", text: "What greeting do we say to our friends and teachers?", emoji: "🤝", options: ["Assalamu Alaikum","Good night","Goodbye","See you"], answer: "Assalamu Alaikum", explanation: "The greeting of peace in Islam is Assalamu Alaikum." },
+      { id: 54, subject: "Islamic Studies", unit: "Prophet Muhammad", type: "MULTIPLE_CHOICE", text: "What was the name of Prophet Muhammad's father?", emoji: "✨", options: ["Abdullah","Abu Talib","Abdul Muttalib","Hamzah"], answer: "Abdullah", explanation: "Our beloved Prophet is Muhammad son of Abdullah (peace be upon him)." },
+      { id: 55, subject: "Islamic Studies", unit: "Islamic Manners", type: "TRUE_FALSE", text: "Helping our parents and respecting elders is a noble deed in Islam.", emoji: "👵", options: ["True","False"], answer: "True", explanation: "Prophet Muhammad (PBUH) taught us to respect elders and help parents." },
+      { id: 56, subject: "Islamic Studies", unit: "Prayers", type: "MULTIPLE_CHOICE", text: "How many obligatory daily prayers (Salah) do Muslims perform?", emoji: "🕌", options: ["3","4","5","6"], answer: "5", explanation: "Muslims perform 5 daily prayers: Fajr, Dhuhr, Asr, Maghrib, and Isha." },
+      { id: 57, subject: "Islamic Studies", unit: "Holy Quran", type: "MULTIPLE_CHOICE", text: "What is the Holy Book revealed by Allah to Prophet Muhammad (PBUH)?", emoji: "📖", options: ["The Holy Quran","The Torah","The Gospel","The Psalms"], answer: "The Holy Quran", explanation: "The Holy Quran is the divine book of Allah revealed to Prophet Muhammad." },
+      { id: 58, subject: "Islamic Studies", unit: "Islamic Manners", type: "MULTIPLE_CHOICE", text: "What do we say after we finish eating?", emoji: "🍽️", options: ["Alhamdulillah","Good morning","Excuse me","Sorry"], answer: "Alhamdulillah", explanation: "We thank Allah by saying Alhamdulillah after finishing our meal." },
+      { id: 59, subject: "Islamic Studies", unit: "Islamic Manners", type: "MATCH_COLUMNS", text: "Match each Islamic phrase to when we say it:", emoji: "🤲", options: ["Bismillah-Before eating","Alhamdulillah-After eating","Assalamu Alaikum-Greeting others","JazakAllahu Khairan-Thanking someone"], answer: "Bismillah-Before eating;Alhamdulillah-After eating;Assalamu Alaikum-Greeting others;JazakAllahu Khairan-Thanking someone", explanation: "Beautiful Islamic phrases bring peace, gratitude, and blessings!" },
+      { id: 60, subject: "Islamic Studies", unit: "Holy Quran", type: "FILL_BLANK", text: "The first Surah of the Holy Quran is Surah Al-...atiha.", emoji: "📜", options: ["F","B","S","M"], answer: "F", explanation: "Surah Al-Fatiha (The Opening) is the very first chapter of the Holy Quran." }
+    ];
+
+    // ==================== STORAGE & STATE ====================
+    const STORAGE_KEY = "little_reviewer_web_v1";
+    const todayStr = () => new Date().toISOString().slice(0, 10);
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch (_) {}
+      return {
+        studentName: "البطل الصغير",
+        studentAvatar: "🦉",
+        soundEnabled: true,
+        ttsEnabled: true,
+        dailyStreak: 1,
+        lastActiveDate: todayStr(),
+        dailyChallengeDate: "",
+        attempts: [],
+        customQuestions: []
+      };
+    }
+
+    let state = loadState();
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function updateStreak() {
+      const t = todayStr();
+      if (state.lastActiveDate !== t) {
+        const prev = new Date(state.lastActiveDate);
+        const curr = new Date(t);
+        const diffDays = Math.round((curr - prev) / 86400000);
+        state.dailyStreak = diffDays === 1 ? state.dailyStreak + 1 : 1;
+        state.lastActiveDate = t;
+        saveState();
+      }
+    }
+    updateStreak();
+
+    function getAllQuestions() {
+      return [...DEFAULT_QUESTIONS, ...(state.customQuestions || [])];
+    }
+
+    // ==================== AUDIO & SPEECH ====================
+    let audioCtx = null;
+    function playTone(freq, dur, type = "sine", delay = 0) {
+      if (!state.soundEnabled) return;
+      try {
+        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
+        gain.gain.setValueAtTime(0.14, audioCtx.currentTime + delay);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + dur);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(audioCtx.currentTime + delay);
+        osc.stop(audioCtx.currentTime + delay + dur);
+      } catch (_) {}
+    }
+
+    function playWinSound() {
+      playTone(523.25, 0.14, "triangle", 0);
+      playTone(659.25, 0.14, "triangle", 0.1);
+      playTone(783.99, 0.22, "triangle", 0.2);
+    }
+
+    function playWrongSound() {
+      playTone(260, 0.16, "sawtooth", 0);
+      playTone(210, 0.22, "sawtooth", 0.12);
+    }
+
+    function speakText(text, lang = "en-US") {
+      if (!state.ttsEnabled || !("speechSynthesis" in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = lang;
+        u.rate = 0.92;
+        window.speechSynthesis.speak(u);
+      } catch (_) {}
+    }
+
+    function stopSpeech() {
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+    }
+
+    // ==================== NAVIGATION & UI STATE ====================
+    let view = "hub"; // hub | quiz | rewards | profile | dashboard | memory | match_game | story
+    let quiz = null;
+    let memoryState = null;
+    let matchGameState = null;
+    let storyState = null;
+    let dashFilter = "All";
+
+    function navigate(next) {
+      stopSpeech();
+      view = next;
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function totalStars() {
+      return state.attempts.reduce((s, a) => s + (a.stars || 0), 0);
+    }
+
+    function normalizeArrange(str) {
+      return String(str || "")
+        .replace(/[\u064B-\u065F\u0670]/g, "")
+        .replace(/[\s\-_]/g, "")
+        .toUpperCase();
+    }
+
+    // ==================== START QUIZ ====================
+    function startQuiz(subject, isDaily = false) {
+      const pool = getAllQuestions();
+      let list = isDaily
+        ? [...pool].sort(() => Math.random() - 0.5).slice(0, 6)
+        : pool.filter(q => q.subject === subject).sort(() => Math.random() - 0.5).slice(0, 5);
+
+      if (!list.length) list = pool.slice(0, 5);
+      quiz = {
+        subject: isDaily ? "التحدي اليومي 🌟" : subject,
+        isDaily,
+        questions: list,
+        index: 0,
+        score: 0,
+        combo: 0,
+        bestCombo: 0,
+        selectedOption: "",
+        arrangeTiles: [],
+        matchLeft: null,
+        matchedPairs: {},
+        hintText: "",
+        feedback: null, // { ok, explanation, correctAnswer }
+        finished: false
+      };
+      navigate("quiz");
+    }
+
+    function submitAnswer() {
+      const q = quiz.questions[quiz.index];
+      let userAns = "";
+      if (q.type === "ARRANGE_LETTERS") {
+        userAns = quiz.arrangeTiles.map(t => t.val).join("");
+      } else if (q.type === "MATCH_COLUMNS") {
+        const expected = q.options.length;
+        const okCount = Object.keys(quiz.matchedPairs).length;
+        if (okCount < expected) return;
+        userAns = q.answer;
+      } else {
+        userAns = quiz.selectedOption;
+      }
+      if (!userAns) return;
+
+      const ok = q.type === "ARRANGE_LETTERS"
+        ? normalizeArrange(userAns) === normalizeArrange(q.answer)
+        : userAns === q.answer;
+
+      if (ok) {
+        quiz.score += 1;
+        quiz.combo += 1;
+        quiz.bestCombo = Math.max(quiz.bestCombo, quiz.combo);
+        playWinSound();
+      } else {
+        quiz.combo = 0;
+        playWrongSound();
+      }
+
+      quiz.feedback = {
+        ok,
+        explanation: q.explanation,
+        correctAnswer: q.answer
+      };
+      render();
+    }
+
+    function nextQuestion() {
+      if (quiz.index + 1 < quiz.questions.length) {
+        quiz.index += 1;
+        quiz.selectedOption = "";
+        quiz.arrangeTiles = [];
+        quiz.matchLeft = null;
+        quiz.matchedPairs = {};
+        quiz.hintText = "";
+        quiz.feedback = null;
+        render();
+      } else {
+        const bonus = quiz.isDaily ? 3 : 0;
+        const stars = quiz.score * 2 + (quiz.score === quiz.questions.length ? 3 : 0) + bonus;
+        state.attempts.unshift({
+          id: Date.now(),
+          subject: quiz.subject,
+          score: quiz.score,
+          total: quiz.questions.length,
+          stars,
+          date: todayStr()
+        });
+        if (quiz.isDaily) state.dailyChallengeDate = todayStr();
+        saveState();
+        quiz.earnedStars = stars;
+        quiz.finished = true;
+        playWinSound();
+        render();
+      }
+    }
+
+    function useHint() {
+      const q = quiz.questions[quiz.index];
+      const isAr = q.subject === "اللغة العربية";
+      if (q.type === "MATCH_COLUMNS") {
+        quiz.hintText = isAr ? "تلميح: اربط كل عنصر بالعمود الأيمن بما يناسبه." : "Hint: Match each item on the left with its partner on the right.";
+      } else {
+        const firstChar = String(q.answer).slice(0, 1);
+        quiz.hintText = isAr ? `تلميح: الإجابة تبدأ بـ (${firstChar})` : `Hint: Answer starts with "${firstChar}"`;
+      }
+      render();
+    }
+
+    // ==================== GAMES ====================
+    function startMemoryGame(pack = "english") {
+      const packs = {
+        english: [["🍎","Apple"],["🐶","Dog"],["☀️","Sun"],["🚗","Car"],["🐱","Cat"],["🌟","Star"]],
+        math: [["2 + 2","4"],["3 + 5","8"],["9 - 3","6"],["5 + 5","10"],["7 - 2","5"],["1 + 1","2"]],
+        arabic: [["أ","أرنب"],["ب","بطة"],["ت","تفاحة"],["🦁","أسد"],["🌙","قمر"],["🐟","سمكة"]]
+      };
+      const cards = [];
+      packs[pack].forEach(([a, b], idx) => {
+        cards.push({ id: idx * 2, pair: idx, label: a, open: false, matched: false });
+        cards.push({ id: idx * 2 + 1, pair: idx, label: b, open: false, matched: false });
+      });
+      cards.sort(() => Math.random() - 0.5);
+      memoryState = { pack, cards, picked: [], moves: 0, won: false, lock: false };
+      navigate("memory");
+    }
+
+    function flipMemoryCard(i) {
+      if (memoryState.lock || memoryState.cards[i].open || memoryState.cards[i].matched) return;
+      memoryState.cards[i].open = true;
+      memoryState.picked.push(i);
+      render();
+
+      if (memoryState.picked.length === 2) {
+        memoryState.moves += 1;
+        const [a, b] = memoryState.picked;
+        if (memoryState.cards[a].pair === memoryState.cards[b].pair) {
+          memoryState.cards[a].matched = true;
+          memoryState.cards[b].matched = true;
+          memoryState.picked = [];
+          playWinSound();
+          if (memoryState.cards.every(c => c.matched)) {
+            memoryState.won = true;
+            state.attempts.unshift({ id: Date.now(), subject: "لعبة الذاكرة 🧠", score: 6, total: 6, stars: 6, date: todayStr() });
+            saveState();
+          }
+          render();
+        } else {
+          memoryState.lock = true;
+          setTimeout(() => {
+            memoryState.cards[a].open = false;
+            memoryState.cards[b].open = false;
+            memoryState.picked = [];
+            memoryState.lock = false;
+            render();
+          }, 700);
+        }
+      }
+    }
+
+    function startMatchGame(pack = "letters") {
+      const packs = {
+        letters: [
+          { q: "أ", a: "🐰 أرنب" },
+          { q: "ب", a: "🦆 بطة" },
+          { q: "س", a: "🐟 سمكة" },
+          { q: "ق", a: "🌙 قمر" }
+        ],
+        math: [
+          { q: "2 + 3", a: "5" },
+          { q: "4 + 4", a: "8" },
+          { q: "9 - 2", a: "7" },
+          { q: "6 + 4", a: "10" }
+        ],
+        english: [
+          { q: "Apple", a: "🍎" },
+          { q: "Cat", a: "🐱" },
+          { q: "Sun", a: "☀️" },
+          { q: "Book", a: "📖" }
+        ]
+      };
+      const items = packs[pack];
+      const targets = [...items].sort(() => Math.random() - 0.5);
+      matchGameState = { pack, items, targets, selectedLeft: null, matched: {}, finished: false };
+      navigate("match_game");
+    }
+
+    function startStory() {
+      storyState = {
+        step: 0,
+        saved: false,
+        steps: [
+          { emoji: "🦉", title: "مغامرة البومة الحكيمة", text: "مرحباً يا بطل! وجدت البومة خريطة كنز في الحديقة، لكننا نحتاج حل ٣ ألغاز لنفتح الصندوق!", choices: [{ label: "هيا نبدأ المغامرة! 🚀", next: 1 }] },
+          { emoji: "🦋", title: "اللغز الأول: عد الفراشات", text: "رأت البومة ٣ فراشات على زهرة، ثم جاءت ٢ فراشة أخرى. كم فراشة أصبحت الآن؟", choices: [{ label: "5 فراشات 🦋", next: 2, ok: true }, { label: "3 فراشات", next: 1, ok: false }] },
+          { emoji: "🌱", title: "اللغز الثاني: سر النبات", text: "وجدنا شجرة صغيرة عطشانة. ماذا تحتاج لتنمو خضراء وقوية؟", choices: [{ label: "الماء وضوء الشمس 💧☀️", next: 3, ok: true }, { label: "الحجارة فقط 🪨", next: 2, ok: false }] },
+          { emoji: "📖", title: "اللغز الثالث: كلمة السر", text: "على باب الكنز مكتوب: A _ P L E. ما الحرف الناقص؟", choices: [{ label: "حرف P 🍎", next: 4, ok: true }, { label: "حرف Z", next: 3, ok: false }] },
+          { emoji: "🏆", title: "فتحنا صندوق الكنز!", text: "أحسنت يا بطل الصف الأول! لقد أتممت القصة بنجاح وحصلت على 8 نجوم ذهبية!", choices: [] }
+        ]
+      };
+      navigate("story");
+    }
+
+    // ==================== RENDER VIEWS ====================
+    function render() {
+      const root = document.getElementById("app");
+      if (view === "hub") root.innerHTML = renderHub();
+      else if (view === "quiz") root.innerHTML = renderQuiz();
+      else if (view === "rewards") root.innerHTML = renderRewards();
+      else if (view === "profile") root.innerHTML = renderProfile();
+      else if (view === "dashboard") root.innerHTML = renderDashboard();
+      else if (view === "memory") root.innerHTML = renderMemory();
+      else if (view === "match_game") root.innerHTML = renderMatchGame();
+      else if (view === "story") root.innerHTML = renderStory();
+    }
+
+    function svgMath() {
+      return `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="3"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="11" x2="10" y2="11"/><line x1="14" y1="11" x2="16" y2="11"/><line x1="8" y1="15" x2="10" y2="15"/><line x1="14" y1="15" x2="16" y2="15"/></svg>`;
+    }
+    function svgEnglish() {
+      return `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`;
+    }
+    function svgScience() {
+      return `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 3v5l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3"/><path d="M7.5 14h9"/></svg>`;
+    }
+    function svgArabic() {
+      return `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`;
+    }
+
+    function renderHub() {
+      const qAll = getAllQuestions();
+      const count = sub => qAll.filter(q => q.subject === sub).length;
+      const dailyDone = state.dailyChallengeDate === todayStr();
+
+      return `
+        <header class="top-header">
+          <button class="profile-chip" onclick="navigate('profile')">
+            <div class="avatar-circle">${state.studentAvatar}</div>
+            <div>
+              <div class="greeting-sub">أهلاً يا بطل الصف الأول</div>
+              <div class="greeting-name">${escapeHtml(state.studentName)}</div>
+            </div>
+          </button>
+          <div class="stats-row">
+            <span class="pill pill-star">⭐ ${totalStars()}</span>
+            <span class="pill pill-streak">🔥 ${state.dailyStreak}</span>
+            <button class="pill pill-btn" onclick="navigate('rewards')">🏆 الجوائز</button>
+            <button class="pill pill-btn" onclick="navigate('dashboard')">📊 الأهل</button>
+          </div>
+        </header>
+
+        <div class="section-title">
+          <h2>المواد الدراسية الأساسية</h2>
+          <span class="en">Select a Subject</span>
+        </div>
+
+        <div class="subjects-grid">
+          <button class="subject-card grad-math" onclick="startQuiz('Mathematics')">
+            <div class="icon-badge">${svgMath()}</div>
+            <h3 class="en">Math</h3>
+            <span class="sub en">${count('Mathematics')} Questions</span>
+          </button>
+
+          <button class="subject-card grad-english" onclick="startQuiz('English')">
+            <div class="icon-badge">${svgEnglish()}</div>
+            <h3 class="en">English</h3>
+            <span class="sub en">${count('English')} Questions</span>
+          </button>
+
+          <button class="subject-card grad-science" onclick="startQuiz('Science')">
+            <div class="icon-badge">${svgScience()}</div>
+            <h3 class="en">Science</h3>
+            <span class="sub en">${count('Science')} Questions</span>
+          </button>
+
+          <button class="subject-card grad-arabic" onclick="startQuiz('اللغة العربية')">
+            <div class="icon-badge">${svgArabic()}</div>
+            <h3>اللغة العربية</h3>
+            <span class="sub">${count('اللغة العربية')} أسئلة</span>
+          </button>
+        </div>
+
+        <button class="daily-banner" onclick="startQuiz('', true)">
+          <div>
+            <h3>${dailyDone ? '✅ أنجزت تحدي اليوم!' : '⚡ التحدي اليومي السريع'}</h3>
+            <p>${dailyDone ? 'يمكنك لعبه مرة أخرى للمراجعة' : '٦ أسئلة متنوعة + ٣ نجوم إضافية مكافأة!'}</p>
+          </div>
+          <span style="font-size:34px">🎯</span>
+        </button>
+
+        <div class="section-title">
+          <h2>مواد إضافية</h2>
+          <span class="en">More Subjects</span>
+        </div>
+
+        <div class="two-col">
+          <button class="mini-subject grad-social" onclick="startQuiz('Social Studies')">
+            <div class="mini-icon">🌍</div>
+            <div>
+              <div class="en" style="font-weight:900;font-size:15px">Social Studies</div>
+              <div class="en" style="font-size:12px;opacity:.9">${count('Social Studies')} Questions</div>
+            </div>
+          </button>
+          <button class="mini-subject grad-islamic" onclick="startQuiz('Islamic Studies')">
+            <div class="mini-icon">🕌</div>
+            <div>
+              <div class="en" style="font-weight:900;font-size:15px">Islamic Studies</div>
+              <div class="en" style="font-size:12px;opacity:.9">${count('Islamic Studies')} Questions</div>
+            </div>
+          </button>
+        </div>
+
+        <div class="section-title">
+          <h2>الألعاب والقصص التفاعلية</h2>
+          <span>تعلّم باللعب</span>
+        </div>
+
+        <button class="activity-card" onclick="startMemoryGame('english')">
+          <div class="activity-left">
+            <div class="activity-emoji" style="background:#EDE9FE">🧠</div>
+            <div>
+              <div style="font-weight:900;font-size:16px">لعبة الذاكرة الذكية</div>
+              <div style="font-size:13px;color:var(--muted)">طابق البطاقات المتشابهة في الإنجليزية والرياضيات والعربية</div>
+            </div>
+          </div>
+          <span>⬅️</span>
+        </button>
+
+        <button class="activity-card" onclick="startMatchGame('letters')">
+          <div class="activity-left">
+            <div class="activity-emoji" style="background:#DCFCE7">🧩</div>
+            <div>
+              <div style="font-weight:900;font-size:16px">لعبة التوصيل السريع</div>
+              <div style="font-size:13px;color:var(--muted)">صل الحروف والأرقام والكلمات بالصورة المناسبة</div>
+            </div>
+          </div>
+          <span>⬅️</span>
+        </button>
+
+        <button class="activity-card" onclick="startStory()">
+          <div class="activity-left">
+            <div class="activity-emoji" style="background:#FEF3C7">🦉</div>
+            <div>
+              <div style="font-weight:900;font-size:16px">مغامرة البومة التفاعلية</div>
+              <div style="font-size:13px;color:var(--muted)">قصة شيقة مع ٣ ألغاز وكنز من النجوم</div>
+            </div>
+          </div>
+          <span>⬅️</span>
+        </button>
+      `;
+    }
+
+    function renderQuiz() {
+      if (quiz.finished) {
+        const pct = Math.round((quiz.score / quiz.questions.length) * 100);
+        return `
+          <div class="card" style="text-align:center;padding:28px 20px">
+            <div style="font-size:64px">${pct >= 80 ? '🏆' : pct >= 50 ? '🌟' : '💪'}</div>
+            <h2 style="margin:8px 0;font-size:24px;font-weight:900">${pct >= 80 ? 'عمل رائع يا بطل!' : 'أحسنت المحاولة!'}</h2>
+            <p style="color:var(--muted);font-weight:700">${escapeHtml(quiz.subject)}</p>
+            <div style="display:flex;justify-content:center;gap:12px;margin:18px 0;flex-wrap:wrap">
+              <span class="pill pill-btn" style="font-size:16px">النتيجة: ${quiz.score} / ${quiz.questions.length}</span>
+              <span class="pill pill-star" style="font-size:16px">+${quiz.earnedStars} ⭐</span>
+              ${quiz.bestCombo >= 2 ? `<span class="pill pill-streak" style="font-size:16px">أطول سلسلة: ${quiz.bestCombo} 🔥</span>` : ''}
+            </div>
+            <button class="primary-btn" style="margin-bottom:10px" onclick="startQuiz('${escapeAttr(quiz.subject)}', ${quiz.isDaily})">العب جولة أخرى 🔄</button>
+            <button class="secondary-btn" style="width:100%" onclick="navigate('hub')">العودة للرئيسية 🏠</button>
+          </div>
+        `;
+      }
+
+      const q = quiz.questions[quiz.index];
+      const isAr = q.subject === "اللغة العربية";
+      const dir = isAr ? "rtl" : "ltr";
+      const pct = Math.round(((quiz.index + 1) / quiz.questions.length) * 100);
+      const speechLang = isAr ? "ar-SA" : "en-US";
+
+      let bodyHtml = "";
+      if (q.type === "ARRANGE_LETTERS") {
+        const usedIds = new Set(quiz.arrangeTiles.map(t => t.idx));
+        bodyHtml = `
+          <div class="arrange-box" dir="${dir}">
+            ${quiz.arrangeTiles.length
+              ? quiz.arrangeTiles.map(t => `<span class="letter-tile">${escapeHtml(t.val)}</span>`).join("")
+              : `<span style="color:var(--muted);font-weight:700">${isAr ? 'اضغط على الحروف بالأسفل بالترتيب' : 'Tap the tiles below in order'}</span>`}
+          </div>
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:14px" dir="${dir}">
+            ${q.options.map((opt, idx) => `
+              <button class="letter-tile ${usedIds.has(idx) ? 'used' : ''}" onclick="pickTile(${idx}, '${escapeAttr(opt)}')">${escapeHtml(opt)}</button>
+            `).join("")}
+          </div>
+          ${quiz.arrangeTiles.length && !quiz.feedback ? `
+            <div style="text-align:center;margin-bottom:12px">
+              <button class="secondary-btn" onclick="undoTile()">${isAr ? 'تراجع ⌫' : 'Undo ⌫'}</button>
+            </div>` : ""}
+        `;
+      } else if (q.type === "MATCH_COLUMNS") {
+        const pairs = q.options.map(p => p.split("-"));
+        const rights = [...pairs.map(p => p[1])].sort();
+        bodyHtml = `
+          <div class="match-cols" dir="${dir}">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              ${pairs.map(([l]) => {
+                const done = Boolean(quiz.matchedPairs[l]);
+                const active = quiz.matchLeft === l;
+                return `<button class="match-btn ${done ? 'done' : active ? 'active' : ''}" onclick="pickMatchLeft('${escapeAttr(l)}')">${escapeHtml(l)}</button>`;
+              }).join("")}
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              ${rights.map(r => {
+                const done = Object.values(quiz.matchedPairs).includes(r);
+                return `<button class="match-btn ${done ? 'done' : ''}" onclick="pickMatchRight('${escapeAttr(r)}')">${escapeHtml(r)}</button>`;
+              }).join("")}
+            </div>
+          </div>
+        `;
+      } else {
+        const isImg = q.type === "IMAGE_SELECTION";
+        bodyHtml = `
+          <div class="options-grid ${isImg ? 'images-2' : ''}" dir="${dir}">
+            ${q.options.map(opt => `
+              <button class="option-btn ${isImg ? 'emoji-big' : ''} ${quiz.selectedOption === opt ? 'selected' : ''}"
+                onclick="pickOption('${escapeAttr(opt)}')">${escapeHtml(opt)}</button>
+            `).join("")}
+          </div>
+        `;
+      }
+
+      const canSubmit = !quiz.feedback && (
+        (q.type === "ARRANGE_LETTERS" && quiz.arrangeTiles.length === q.options.length) ||
+        (q.type === "MATCH_COLUMNS" && Object.keys(quiz.matchedPairs).length === q.options.length) ||
+        (q.type !== "ARRANGE_LETTERS" && q.type !== "MATCH_COLUMNS" && Boolean(quiz.selectedOption))
+      );
+
+      return `
+        <div class="nav-bar">
+          <button class="back-btn" onclick="navigate('hub')">➡️ رجوع</button>
+          <span class="badge">${escapeHtml(quiz.subject)}</span>
+          <span class="pill pill-star">${quiz.index + 1} / ${quiz.questions.length}</span>
+        </div>
+
+        <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+
+        <div class="card">
+          <div class="q-meta">
+            <span class="badge ${isAr ? '' : 'en'}">${escapeHtml(q.unit)}</span>
+            <div style="display:flex;gap:6px">
+              ${quiz.combo >= 2 ? `<span class="pill pill-streak">🔥 x${quiz.combo}</span>` : ''}
+              <button class="secondary-btn" style="min-height:38px;padding:6px 12px" onclick="speakText('${escapeAttr(q.text)}','${speechLang}')">🔊</button>
+              <button class="secondary-btn" style="min-height:38px;padding:6px 12px" onclick="useHint()">💡</button>
+            </div>
+          </div>
+
+          <div class="q-emoji-box">${q.emoji || '✨'}</div>
+          <div class="q-text" dir="${dir}">${escapeHtml(q.text)}</div>
+
+          ${quiz.hintText ? `<div class="badge" style="margin-bottom:12px;width:100%;justify-content:center;padding:8px">${escapeHtml(quiz.hintText)}</div>` : ''}
+
+          ${bodyHtml}
+
+          ${!quiz.feedback ? `
+            <button class="primary-btn" style="margin-top:16px;opacity:${canSubmit ? 1 : 0.45}" ${canSubmit ? '' : 'disabled'} onclick="submitAnswer()">
+              ${isAr ? 'تحقق من الإجابة ✅' : 'Check Answer ✅'}
+            </button>
+          ` : `
+            <div class="feedback-box ${quiz.feedback.ok ? 'feedback-ok' : 'feedback-no'}">
+              <div style="font-size:20px;font-weight:900;margin-bottom:6px">
+                ${quiz.feedback.ok ? (isAr ? '🎉 أحسنت! إجابة صحيحة' : '🎉 Awesome! Correct!') : (isAr ? '💡 اقتربت! الإجابة الصحيحة:' : '💡 Almost! Correct answer:')}
+              </div>
+              ${!quiz.feedback.ok ? `<div style="font-weight:900;font-size:17px;margin-bottom:6px">${escapeHtml(quiz.feedback.correctAnswer)}</div>` : ''}
+              <p style="margin:0 0 12px;font-weight:700" dir="${dir}">${escapeHtml(quiz.feedback.explanation)}</p>
+              <button class="primary-btn" onclick="nextQuestion()">
+                ${quiz.index + 1 < quiz.questions.length ? (isAr ? 'السؤال التالي ⬅️' : 'Next Question ➡️') : (isAr ? 'عرض النتيجة 🏆' : 'See Results 🏆')}
+              </button>
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    function pickOption(val) {
+      if (quiz.feedback) return;
+      quiz.selectedOption = val;
+      render();
+    }
+
+    function pickTile(idx, val) {
+      if (quiz.feedback) return;
+      quiz.arrangeTiles.push({ idx, val });
+      render();
+    }
+
+    function undoTile() {
+      quiz.arrangeTiles.pop();
+      render();
+    }
+
+    function pickMatchLeft(left) {
+      if (quiz.feedback || quiz.matchedPairs[left]) return;
+      quiz.matchLeft = left;
+      render();
+    }
+
+    function pickMatchRight(right) {
+      if (quiz.feedback || !quiz.matchLeft) return;
+      const q = quiz.questions[quiz.index];
+      const correctPair = q.options.map(p => p.split("-")).find(([l]) => l === quiz.matchLeft);
+      if (correctPair && correctPair[1] === right) {
+        quiz.matchedPairs[quiz.matchLeft] = right;
+        quiz.matchLeft = null;
+        playWinSound();
+      } else {
+        quiz.matchLeft = null;
+        playWrongSound();
+      }
+      render();
+    }
+
+    function renderRewards() {
+      const stars = totalStars();
+      const ranks = [
+        { min: 120, name: "أسطورة المعرفة 👑", next: 200 },
+        { min: 70, name: "عبقري الصف الأول 🚀", next: 120 },
+        { min: 35, name: "مستكشف ذكي 🦉", next: 70 },
+        { min: 10, name: "نجم صاعد 🌟", next: 35 },
+        { min: 0, name: "بطل البداية 🌱", next: 10 }
+      ];
+      const rank = ranks.find(r => stars >= r.min);
+      const pct = Math.min(100, Math.round((stars / rank.next) * 100));
+
+      const atts = state.attempts;
+      const badges = [
+        { emoji: "🌟", title: "خطوة البطل الأولى", desc: "أكمل أول اختبار أو لعبة", ok: atts.length >= 1 },
+        { emoji: "👑", title: "التاج الذهبي", desc: "احصل على علامة كاملة", ok: atts.some(a => a.total > 0 && a.score === a.total) },
+        { emoji: "🧮", title: "عبقري الرياضيات", desc: "اجتز اختبار Math بـ ٣+ إجابات", ok: atts.some(a => a.subject === "Mathematics" && a.score >= 3) },
+        { emoji: "🔤", title: "نجم الإنجليزية", desc: "اجتز اختبار English بـ ٣+ إجابات", ok: atts.some(a => a.subject === "English" && a.score >= 3) },
+        { emoji: "🔬", title: "مكتشف العلوم", desc: "اجتز اختبار Science بـ ٣+ إجابات", ok: atts.some(a => a.subject === "Science" && a.score >= 3) },
+        { emoji: "🕌", title: "فارس الضاد", desc: "اجتز اختبار اللغة العربية", ok: atts.some(a => a.subject === "اللغة العربية" && a.score >= 3) },
+        { emoji: "🏆", title: "جامع النجوم", desc: "اجمع ٥٠ نجمة ذهبية", ok: stars >= 50 },
+        { emoji: "🌈", title: "البطل الشامل", desc: "جرّب ٤ مواد أو أنشطة مختلفة", ok: new Set(atts.map(a => a.subject)).size >= 4 }
+      ];
+
+      return `
+        <div class="nav-bar">
+          <button class="back-btn" onclick="navigate('hub')">➡️ رجوع</button>
+          <h2 style="margin:0;font-size:19px">غرفة الجوائز والأوسمة 🏆</h2>
+          <span class="pill pill-star">⭐ ${stars}</span>
+        </div>
+
+        <div class="card" style="background:linear-gradient(135deg,#6366F1,#8B5CF6);color:#fff">
+          <div style="font-size:13px;opacity:.9;font-weight:700">رتبة البطل الحالية</div>
+          <div style="font-size:24px;font-weight:900;margin:4px 0">${rank.name}</div>
+          <div class="progress-track" style="background:rgba(255,255,255,.25)">
+            <div class="progress-fill" style="width:${pct}%;background:#FBBF24"></div>
+          </div>
+          <div style="font-size:13px;font-weight:700">${stars} / ${rank.next} نجمة للرتبة التالية</div>
+        </div>
+
+        <div class="badges-grid">
+          ${badges.map(b => `
+            <div class="badge-card ${b.ok ? '' : 'locked'}">
+              <div style="font-size:38px">${b.emoji}</div>
+              <div style="font-weight:900;margin:6px 0 4px">${b.title}</div>
+              <div style="font-size:12px;color:var(--muted);font-weight:700">${b.desc}</div>
+              <div style="margin-top:8px;font-size:12px;font-weight:800;color:${b.ok ? '#059669' : '#64748B'}">
+                ${b.ok ? '✅ مفتوح' : '🔒 مقفل'}
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function renderProfile() {
+      const avatars = ["🦉","🦁","🐰","🦊","🐼","🚀","🦄","🐯"];
+      return `
+        <div class="nav-bar">
+          <button class="back-btn" onclick="navigate('hub')">➡️ رجوع</button>
+          <h2 style="margin:0;font-size:19px">ملف البطل الشخصي</h2>
+          <span></span>
+        </div>
+
+        <div class="card" style="text-align:center">
+          <div class="avatar-circle" style="width:82px;height:82px;font-size:42px;margin:0 auto 10px">${state.studentAvatar}</div>
+          <label style="display:block;text-align:start;font-weight:800;margin-bottom:6px">اسم الطالب:</label>
+          <input id="profName" value="${escapeAttr(state.studentName)}" placeholder="أدخل اسم البطل" />
+          <div style="text-align:start;font-weight:800;margin-top:8px">اختر الشخصية المفضلة:</div>
+          <div class="avatar-grid">
+            ${avatars.map(av => `
+              <button class="avatar-pick ${state.studentAvatar === av ? 'active' : ''}" onclick="setAvatar('${av}')">${av}</button>
+            `).join("")}
+          </div>
+          <button class="primary-btn" onclick="saveProfile()">حفظ الملف ✅</button>
+        </div>
+      `;
+    }
+
+    function setAvatar(av) {
+      state.studentAvatar = av;
+      saveState();
+      render();
+    }
+
+    function saveProfile() {
+      const el = document.getElementById("profName");
+      state.studentName = (el && el.value.trim()) || "البطل الصغير";
+      saveState();
+      navigate("hub");
+    }
+
+    function renderDashboard() {
+      const subjects = ["All", "Mathematics", "English", "Science", "اللغة العربية", "Social Studies", "Islamic Studies"];
+      const filtered = dashFilter === "All" ? state.attempts : state.attempts.filter(a => a.subject === dashFilter);
+      const totalQ = filtered.reduce((s, a) => s + a.total, 0);
+      const totalOk = filtered.reduce((s, a) => s + a.score, 0);
+      const acc = totalQ ? Math.round((totalOk / totalQ) * 100) : 0;
+
+      return `
+        <div class="nav-bar">
+          <button class="back-btn" onclick="navigate('hub')">➡️ رجوع</button>
+          <h2 style="margin:0;font-size:19px">لوحة متابعة الأهل والمعلم 📊</h2>
+          <span></span>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-top:0">إعدادات الصوت</h3>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="chip ${state.soundEnabled ? 'active' : ''}" onclick="toggleSound()">
+              ${state.soundEnabled ? '🔊 المؤثرات مفعلة' : '🔇 المؤثرات متوقفة'}
+            </button>
+            <button class="chip ${state.ttsEnabled ? 'active' : ''}" onclick="toggleTts()">
+              ${state.ttsEnabled ? '🗣️ النطق الصوتي مفعل' : '🔕 النطق الصوتي متوقف'}
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-top:0">ملخص الأداء</h3>
+          <div class="chip-row">
+            ${subjects.map(s => `<button class="chip ${dashFilter === s ? 'active' : ''}" onclick="setDashFilter('${escapeAttr(s)}')">${escapeHtml(s)}</button>`).join("")}
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+            <span class="pill pill-btn">المحاولات: ${filtered.length}</span>
+            <span class="pill pill-star">الدقة: ${acc}%</span>
+            <span class="pill pill-streak">النجوم: ${totalStars()} ⭐</span>
+          </div>
+          ${filtered.slice(0, 8).map(a => `
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;font-weight:700">
+              <span>${escapeHtml(a.subject)}</span>
+              <span>${a.score}/${a.total} (+${a.stars}⭐)</span>
+            </div>
+          `).join("") || `<p style="color:var(--muted);font-weight:700">لا توجد محاولات مسجلة في هذا التصنيف بعد.</p>`}
+          ${state.attempts.length ? `<button class="secondary-btn" style="margin-top:12px" onclick="clearAttempts()">مسح سجل المحاولات 🗑️</button>` : ""}
+        </div>
+
+        <div class="card">
+          <h3 style="margin-top:0">إضافة سؤال مخصص ➕</h3>
+          <select id="cqSub">
+            <option value="Mathematics">Mathematics</option>
+            <option value="English">English</option>
+            <option value="Science">Science</option>
+            <option value="اللغة العربية">اللغة العربية</option>
+            <option value="Social Studies">Social Studies</option>
+            <option value="Islamic Studies">Islamic Studies</option>
+          </select>
+          <input id="cqText" placeholder="نص السؤال" />
+          <input id="cqOpts" placeholder="الخيارات مفصولة بفاصلة منقوطة ; مثال: 4;5;6;7" />
+          <input id="cqAns" placeholder="الإجابة الصحيحة تماماً كما في الخيارات" />
+          <button class="primary-btn" onclick="addCustomQ()">حفظ السؤال ✅</button>
+          ${(state.customQuestions || []).map(q => `
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding:8px;background:#F8FAFC;border-radius:12px">
+              <span style="font-size:13px;font-weight:700">${escapeHtml(q.subject)}: ${escapeHtml(q.text)}</span>
+              <button class="secondary-btn" style="min-height:36px;padding:4px 10px" onclick="deleteCustomQ(${q.id})">حذف</button>
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function toggleSound() { state.soundEnabled = !state.soundEnabled; saveState(); render(); }
+    function toggleTts() { state.ttsEnabled = !state.ttsEnabled; saveState(); render(); }
+    function setDashFilter(f) { dashFilter = f; render(); }
+    function clearAttempts() { state.attempts = []; saveState(); render(); }
+    function addCustomQ() {
+      const sub = document.getElementById("cqSub").value;
+      const text = document.getElementById("cqText").value.trim();
+      const opts = document.getElementById("cqOpts").value.split(";").map(s => s.trim()).filter(Boolean);
+      const ans = document.getElementById("cqAns").value.trim();
+      if (!text || opts.length < 2 || !ans) return;
+      state.customQuestions = state.customQuestions || [];
+      state.customQuestions.push({ id: Date.now(), subject: sub, unit: "Custom", type: "MULTIPLE_CHOICE", text, emoji: "⭐", options: opts, answer: ans, explanation: ans });
+      saveState();
+      render();
+    }
+    function deleteCustomQ(id) {
+      state.customQuestions = (state.customQuestions || []).filter(q => q.id !== id);
+      saveState();
+      render();
+    }
+
+    function renderMemory() {
+      return `
+        <div class="nav-bar">
+          <button class="back-btn" onclick="navigate('hub')">➡️ رجوع</button>
+          <h2 style="margin:0;font-size:19px">لعبة الذاكرة 🧠</h2>
+          <span class="pill pill-btn">المحاولات: ${memoryState.moves}</span>
+        </div>
+
+        <div class="chip-row">
+          <button class="chip ${memoryState.pack === 'english' ? 'active' : ''}" onclick="startMemoryGame('english')">English</button>
+          <button class="chip ${memoryState.pack === 'math' ? 'active' : ''}" onclick="startMemoryGame('math')">Math</button>
+          <button class="chip ${memoryState.pack === 'arabic' ? 'active' : ''}" onclick="startMemoryGame('arabic')">العربية</button>
+        </div>
+
+        ${memoryState.won ? `
+          <div class="card" style="text-align:center">
+            <div style="font-size:52px">🎉</div>
+            <h3>رائع! طابقت كل البطاقات وحصلت على 6 نجوم ⭐</h3>
+            <button class="primary-btn" onclick="startMemoryGame('${memoryState.pack}')">العب مجدداً 🔄</button>
+          </div>
+        ` : ''}
+
+        <div class="memory-grid">
+          ${memoryState.cards.map((c, i) => `
+            <button class="mem-card ${c.matched ? 'matched' : c.open ? 'open' : ''}" onclick="flipMemoryCard(${i})">
+              ${c.open || c.matched ? escapeHtml(c.label) : '❓'}
+            </button>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function renderMatchGame() {
+      const doneCount = Object.keys(matchGameState.matched).length;
+      return `
+        <div class="nav-bar">
+          <button class="back-btn" onclick="navigate('hub')">➡️ رجوع</button>
+          <h2 style="margin:0;font-size:19px">التوصيل السريع 🧩</h2>
+          <span class="pill pill-star">${doneCount} / ${matchGameState.items.length}</span>
+        </div>
+
+        <div class="chip-row">
+          <button class="chip ${matchGameState.pack === 'letters' ? 'active' : ''}" onclick="startMatchGame('letters')">الحروف العربية</button>
+          <button class="chip ${matchGameState.pack === 'math' ? 'active' : ''}" onclick="startMatchGame('math')">Math</button>
+          <button class="chip ${matchGameState.pack === 'english' ? 'active' : ''}" onclick="startMatchGame('english')">English</button>
+        </div>
+
+        <div class="card">
+          ${matchGameState.finished ? `
+            <div style="text-align:center">
+              <div style="font-size:52px">🌟</div>
+              <h3>أبدعت! وصلت جميع الأزواج وحصلت على 5 نجوم!</h3>
+              <button class="primary-btn" onclick="startMatchGame('${matchGameState.pack}')">جولة جديدة 🔄</button>
+            </div>
+          ` : `
+            <p style="font-weight:800;text-align:center;color:var(--muted)">اختر بطاقة من اليمين ثم ما يناسبها من اليسار</p>
+            <div class="match-cols">
+              <div style="display:flex;flex-direction:column;gap:10px">
+                ${matchGameState.items.map(it => {
+                  const ok = Boolean(matchGameState.matched[it.q]);
+                  const active = matchGameState.selectedLeft === it.q;
+                  return `<button class="match-btn ${ok ? 'done' : active ? 'active' : ''}" onclick="pickGameLeft('${escapeAttr(it.q)}')">${escapeHtml(it.q)}</button>`;
+                }).join("")}
+              </div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                ${matchGameState.targets.map(it => {
+                  const ok = Object.values(matchGameState.matched).includes(it.a);
+                  return `<button class="match-btn ${ok ? 'done' : ''}" onclick="pickGameRight('${escapeAttr(it.a)}')">${escapeHtml(it.a)}</button>`;
+                }).join("")}
+              </div>
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    function pickGameLeft(q) {
+      if (matchGameState.matched[q]) return;
+      matchGameState.selectedLeft = q;
+      render();
+    }
+
+    function pickGameRight(a) {
+      if (!matchGameState.selectedLeft) return;
+      const item = matchGameState.items.find(it => it.q === matchGameState.selectedLeft);
+      if (item && item.a === a) {
+        matchGameState.matched[item.q] = a;
+        matchGameState.selectedLeft = null;
+        playWinSound();
+        if (Object.keys(matchGameState.matched).length === matchGameState.items.length) {
+          matchGameState.finished = true;
+          state.attempts.unshift({ id: Date.now(), subject: "التوصيل السريع 🧩", score: 4, total: 4, stars: 5, date: todayStr() });
+          saveState();
+        }
+      } else {
+        matchGameState.selectedLeft = null;
+        playWrongSound();
+      }
+      render();
+    }
+
+    function renderStory() {
+      const s = storyState.steps[storyState.step];
+      if (storyState.step === storyState.steps.length - 1 && !storyState.saved) {
+        storyState.saved = true;
+        state.attempts.unshift({ id: Date.now(), subject: "القصة التفاعلية 🦉", score: 3, total: 3, stars: 8, date: todayStr() });
+        saveState();
+        playWinSound();
+      }
+      const pct = Math.round(((storyState.step + 1) / storyState.steps.length) * 100);
+      return `
+        <div class="nav-bar">
+          <button class="back-btn" onclick="navigate('hub')">➡️ رجوع</button>
+          <h2 style="margin:0;font-size:19px">مغامرة البومة 🦉</h2>
+          <span class="pill pill-btn">${storyState.step + 1} / ${storyState.steps.length}</span>
+        </div>
+
+        <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+
+        <div class="card" style="text-align:center">
+          <div style="font-size:66px;margin-bottom:8px">${s.emoji}</div>
+          <h3 style="margin:0 0 10px;font-size:21px;font-weight:900">${escapeHtml(s.title)}</h3>
+          <p style="font-size:16px;line-height:1.65;font-weight:700;margin-bottom:20px">${escapeHtml(s.text)}</p>
+          ${s.choices.length ? `
+            <div style="display:flex;flex-direction:column;gap:10px">
+              ${s.choices.map((c, idx) => `<button class="primary-btn" onclick="pickStoryChoice(${idx})">${escapeHtml(c.label)}</button>`).join("")}
+            </div>
+          ` : `<button class="primary-btn" onclick="navigate('hub')">العودة للرئيسية 🏠</button>`}
+        </div>
+      `;
+    }
+
+    function pickStoryChoice(idx) {
+      const s = storyState.steps[storyState.step];
+      const ch = s.choices[idx];
+      if (ch.ok === false) {
+        playWrongSound();
+        alert("حاول اختياراً آخر يا بطل! 💡");
+        return;
+      }
+      playWinSound();
+      storyState.step = ch.next;
+      render();
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    }
+    function escapeAttr(s) {
+      return String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/"/g,"&quot;");
+    }
+
+    render();
+  </script>
+</body>
+</html>

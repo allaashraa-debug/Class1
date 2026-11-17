@@ -1,0 +1,6 @@
+{
+  "name": "المراجع الصغير",
+  "description": "تطبيق مراجعة غني بالأنشطة والألعاب التفاعلية والأشكال الملونة والأصوات ونظام المكافآت لمواد الصف الأول الابتدائي.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
